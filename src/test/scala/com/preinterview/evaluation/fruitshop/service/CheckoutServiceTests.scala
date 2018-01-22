@@ -25,6 +25,9 @@ class CheckoutServiceTests extends FeatureSpec with GivenWhenThen with BeforeAnd
     val productServiceMock = mock[ProductService]
     Mockito.when(productServiceMock.getPrice("apple")).thenReturn(0.60)
     Mockito.when(productServiceMock.getPrice("orange")).thenReturn(0.25)
+    Mockito.when(productServiceMock.getActiveDiscount("apple")).thenReturn("BuyOneGetOne")
+    Mockito.when(productServiceMock.getActiveDiscount("orange")).thenReturn("ThreeForTwo")
+
     checkoutService = new CheckoutService(productServiceMock)
   }
 
@@ -50,7 +53,6 @@ class CheckoutServiceTests extends FeatureSpec with GivenWhenThen with BeforeAnd
       When("the calculate method is executed")
       val total = checkoutService.calculateTotal(cart);
 
-      pending
       Then("the total returned should be 1.20 after discount")
       assert(total == 1.20)
 
@@ -64,9 +66,8 @@ class CheckoutServiceTests extends FeatureSpec with GivenWhenThen with BeforeAnd
       When("the calculate method is executed")
       val total = checkoutService.calculateTotal(cart);
 
-      pending
-      Then("the total returned should be 1.50 after discount")
-      assert(total == 1.50)
+      Then("the total returned should be 0.75 after discount")
+      assert(total == 0.75)
 
     }
 
@@ -78,9 +79,8 @@ class CheckoutServiceTests extends FeatureSpec with GivenWhenThen with BeforeAnd
       When("the calculate method is executed")
       val total = checkoutService.calculateTotal(cart);
 
-      pending
-      Then("the total returned should be 2.70 after discount")
-      assert(total == 2.70)
+      Then("the total returned should be 1.95 after discount")
+      assert(total == 1.95)
 
     }
   }

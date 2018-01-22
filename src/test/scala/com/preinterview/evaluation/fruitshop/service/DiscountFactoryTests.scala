@@ -11,6 +11,12 @@ import com.preinterview.evaluation.fruitshop.service.CheckoutService
 import org.scalatest.mock.MockitoSugar
 import com.preinterview.evaluation.fruitshop.service.ProductService
 import org.mockito.Mockito
+import com.preinterview.evaluation.fruitshop.service.DiscountFactory
+import com.preinterview.evaluation.fruitshop.service.DiscountCalculatorService.NoDiscount
+import com.preinterview.evaluation.fruitshop.service.DiscountCalculatorService.NoDiscount
+import com.preinterview.evaluation.fruitshop.service.DiscountCalculatorService.NoDiscount
+import com.preinterview.evaluation.fruitshop.service.DiscountCalculatorService.ThreeForTwo
+import com.preinterview.evaluation.fruitshop.service.DiscountCalculatorService.Buy1Get1
 
 @RunWith(classOf[JUnitRunner])
 class DiscountFactoryTests extends FeatureSpec with GivenWhenThen with MockitoSugar {
@@ -25,14 +31,11 @@ class DiscountFactoryTests extends FeatureSpec with GivenWhenThen with MockitoSu
       Given("a unkown type is passed thru")
       val discountType = "FiveForFour"
 
-      pending
-
       When("the discount factory is invoked to get the instance of the calculator")
-      val calculator = ""
+      val calculator = DiscountFactory.getInstance(discountType)
 
       Then("the returned Class should be of type NoDiscount Calculator")
-      assert(calculator.getClass == List.getClass)
-
+      assert(calculator.isInstanceOf[NoDiscount])
     }
 
     scenario("BuyOneGetOne") {
@@ -40,13 +43,11 @@ class DiscountFactoryTests extends FeatureSpec with GivenWhenThen with MockitoSu
       Given("a buy one get one discount calculator is needed")
       val discountType = "BuyOneGetOne"
 
-      pending
-
       When("the discount factory is invoked to get the instance of the calculator")
-      val calculator = ""
+      val calculator = DiscountFactory.getInstance(discountType)
 
       Then("the returned Class should be of type buyOneGetOne Calculator")
-      assert(calculator.getClass == List.getClass)
+      assert(calculator.isInstanceOf[Buy1Get1])
 
     }
 
@@ -55,14 +56,11 @@ class DiscountFactoryTests extends FeatureSpec with GivenWhenThen with MockitoSu
       Given("a Three for two discount calculator is needed")
       val discountType = "ThreeForTwo"
 
-      pending
-
       When("the discount factory is invoked to get the instance of the calculator")
-      val calculator = ""
+      val calculator = DiscountFactory.getInstance(discountType)
 
       Then("the returned Class should be of type ThreeForTwo Calculator")
-      assert(calculator.getClass == List.getClass)
-
+      assert(calculator.isInstanceOf[ThreeForTwo])
     }
 
   }

@@ -17,7 +17,7 @@ class CheckoutServiceTests extends FeatureSpec with GivenWhenThen with BeforeAnd
 
   info("As a checkout service consumer")
   info("I want to be able to get the final total of the cart")
-  info("So when I pass in the list of apples and oranges, the prices are calculated according to the configured costs")
+  info("So when I pass in the list of apples and oranges, the prices are calculated according to the configured costs and with the simple multibuy discounts as applicable")
 
   var checkoutService: CheckoutService = _
 
@@ -25,6 +25,9 @@ class CheckoutServiceTests extends FeatureSpec with GivenWhenThen with BeforeAnd
     val productServiceMock = mock[ProductService]
     Mockito.when(productServiceMock.getPrice("apple")).thenReturn(0.60)
     Mockito.when(productServiceMock.getPrice("orange")).thenReturn(0.25)
+    Mockito.when(productServiceMock.getActiveDiscount("apple")).thenReturn("BuyOneGetOne")
+    Mockito.when(productServiceMock.getActiveDiscount("orange")).thenReturn("ThreeForTwo")
+
     checkoutService = new CheckoutService(productServiceMock)
   }
 
@@ -50,34 +53,34 @@ class CheckoutServiceTests extends FeatureSpec with GivenWhenThen with BeforeAnd
       When("the calculate method is executed")
       val total = checkoutService.calculateTotal(cart);
 
-      Then("the total returned should be 1.80")
-      assert(total == 1.80)
+      Then("the total returned should be 1.20 after discount")
+      assert(total == 1.20)
 
     }
 
     scenario("Only Oranges") {
 
       Given("a list of only oranges is passed")
-      val cart = List("Orange", "Orange")
+      val cart = List("Orange", "Orange", "Orange", "Orange")
 
       When("the calculate method is executed")
       val total = checkoutService.calculateTotal(cart);
 
-      Then("the total returned should be 0.50")
-      assert(total == 0.50)
+      Then("the total returned should be 0.75 after discount")
+      assert(total == 0.75)
 
     }
 
     scenario("Mixed Cart") {
 
       Given("a mixed list of apples and oranges is passed")
-      val cart = List("Apple", "Apple", "Orange", "Orange", "Apple")
+      val cart = List("Apple", "Apple", "Orange", "Orange", "Apple", "Orange", "Orange")
 
       When("the calculate method is executed")
       val total = checkoutService.calculateTotal(cart);
 
-      Then("the total returned should be 2.30")
-      assert(total == 2.30)
+      Then("the total returned should be 1.95 after discount")
+      assert(total == 1.95)
 
     }
   }
